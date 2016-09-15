@@ -69,7 +69,7 @@ function handleSourceOpen(event) {
 
 audioPlayer.addEventListener('error', function(ev) {
   console.error('MediaRecording.recordedMedia.error()');
-  alert('Your browser can not play\n\n' + recordedVideo.src
+  alert('Your browser can not play\n\n' + audioPlayer.src
     + '\n\n media clip. event: ' + JSON.stringify(ev));
 }, true);
 
