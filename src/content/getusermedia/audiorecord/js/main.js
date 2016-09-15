@@ -52,11 +52,6 @@ var constraints = {
 function handleSuccess(stream) {
   console.log('getUserMedia() got stream: ', stream);
   window.stream = stream;
-  if (window.URL) {
-    audioPlayer.src = window.URL.createObjectURL(stream);
-  } else {
-    audioPlayer.src = stream;
-  }
 }
 
 function handleError(error) {
