@@ -86,6 +86,7 @@ function handleStop(event) {
 function toggleRecording() {
   if (recordButton.textContent === 'Start Recording') {
     startRecording();
+    audioPlayer.pause();
   } else {
     stopRecording();
     recordButton.textContent = 'Start Recording';
