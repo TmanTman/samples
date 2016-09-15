@@ -23,8 +23,7 @@ var mediaRecorder;
 var recordedBlobs;
 var sourceBuffer;
 
-var gumVideo = document.querySelector('video#gum');
-var recordedVideo = document.querySelector('video#recorded');
+var audioPlayer = document.querySelector('audio');
 
 var recordButton = document.querySelector('button#record');
 var playButton = document.querySelector('button#play');
@@ -47,16 +46,16 @@ if (!isSecureOrigin) {
 
 var constraints = {
   audio: true,
-  video: true
+  video: false
 };
 
 function handleSuccess(stream) {
   console.log('getUserMedia() got stream: ', stream);
   window.stream = stream;
   if (window.URL) {
-    gumVideo.src = window.URL.createObjectURL(stream);
+    audioPlayer.src = window.URL.createObjectURL(stream);
   } else {
-    gumVideo.src = stream;
+    audioPlayer.src = stream;
   }
 }
 
@@ -73,7 +72,7 @@ function handleSourceOpen(event) {
   console.log('Source buffer: ', sourceBuffer);
 }
 
-recordedVideo.addEventListener('error', function(ev) {
+audioPlayer.addEventListener('error', function(ev) {
   console.error('MediaRecording.recordedMedia.error()');
   alert('Your browser can not play\n\n' + recordedVideo.src
     + '\n\n media clip. event: ' + JSON.stringify(ev));
@@ -103,13 +102,13 @@ function toggleRecording() {
 // The nested try blocks will be simplified when Chrome 47 moves to Stable
 function startRecording() {
   recordedBlobs = [];
-  var options = {mimeType: 'video/webm;codecs=vp9'};
+  var options = {mimeType: 'audio/webm;codecs=opus'};
   if (!MediaRecorder.isTypeSupported(options.mimeType)) {
     console.log(options.mimeType + ' is not Supported');
-    options = {mimeType: 'video/webm;codecs=vp8'};
+    options = {mimeType: 'audio/webm;codecs=vorbis'};
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
       console.log(options.mimeType + ' is not Supported');
-      options = {mimeType: 'video/webm'};
+      options = {mimeType: 'audio/webm'};
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
         console.log(options.mimeType + ' is not Supported');
         options = {mimeType: ''};
@@ -137,16 +136,15 @@ function startRecording() {
 function stopRecording() {
   mediaRecorder.stop();
   console.log('Recorded Blobs: ', recordedBlobs);
-  recordedVideo.controls = true;
 }
 
 function play() {
-  var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-  recordedVideo.src = window.URL.createObjectURL(superBuffer);
+  var superBuffer = new Blob(recordedBlobs, {type: 'audio/webm'});
+  audioPlayer.src = window.URL.createObjectURL(superBuffer);
 }
 
 function download() {
-  var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+  var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
   var url = window.URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.style.display = 'none';
